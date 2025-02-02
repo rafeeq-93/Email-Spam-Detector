@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spam Detector</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    <script>
+        async function predictSpam() {
+            const textInput = document.getElementById("textInput").value;
+            const response = await fetch("/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ text: textInput }),
+            });
+            const result = await response.json();
+            document.getElementById("result").innerText = result.error ? result.error : `Prediction: ${result.prediction}`;
+        }
+    </script>
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Spam Detector</h1>
+            <div class="field">
+                <label class="label">Enter Email Text</label>
+                <div class="control">
+                    <textarea id="textInput" class="textarea" placeholder="Type your email here..."></textarea>
+                </div>
+            </div>
+            <div class="control">
+                <button class="button is-primary" onclick="predictSpam()">Check Spam</button>
+            </div>
+            <div id="result" class="notification is-info" style="margin-top: 20px;"></div>
+        </div>
+    </section>
+</body>
+</html>
